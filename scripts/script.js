@@ -13,18 +13,28 @@ const capturarDatos = (form) =>{
 const limpiarDatos = (form) =>{ 
     form['textNombre'].value = ''
     form['textApellido'].value = ''
-    form['textMatricula'].val =''
+    form['textMatricula'].value =''
     form['textNota'].value = ''
 }
 const guardarDatos = (registro) =>{
     registro.id = id
     datos.push(registro)
-    limpiarDatos(form)
+    // limpiarDatos(form)
 }
 const incrementarId = () =>{
     id += 1
 }
-
+const calcularPromedio = () =>{
+    total = 0
+    promedio = datos.forEach( (element) =>{
+        total += new Number(element.nota)
+    })
+    promedio = total/datos.length
+    console.log(total)
+    console.log(datos.length)
+    console.log(promedio)
+    document.getElementById('promedio').innerHTML=`${promedio}`
+}
 const eliminarDatos = (ev) =>{
     datos.forEach( element => {
         console.log(element.id)
@@ -41,52 +51,45 @@ const eliminarDatos = (ev) =>{
 
 const editarDatos = (ev,body) =>{
     // console.log(ev.target.parentNode.parentNode.childNodes ) 
-   
-    
+    console.log(ev.target.id)
+    actualRow = {}        
+    datos.forEach(element =>{
+        if(element.id == ev.target.id){
+            actualRow = element
+        }
+    })
+    console.log(actualRow)
     if (ev.target.innerHTML == 'Editar'){
-        datos.forEach(element =>{
-            if(element.id == new Number(ev.target.id)){
-                console.log(element)
-                form['textNombre'].value = element.nombre
-                form['textApellido'].value = element.apellido
-                form['textMatricula'].value = element.matricula
-                form['textNota'].value = element.nota  
-            }
-        })
-
-        
+        form['textNombre'].value = actualRow.nombre
+        form['textApellido'].value = actualRow.apellido
+        form['textMatricula'].value = actualRow.matricula
+        form['textNota'].value = actualRow.nota 
         ev.target.innerHTML = 'Salvar'
-    }else{
+    } else{
         row = {}
         
-        ev.target.innerHTML = 'Editar'
-        row.nombre = form['textNombre'].value
-        row.apellido = form['textApellido'].value
-        row.matricula = form['textMatricula'].value
-        row.nota = form['textNota'].value 
-        console.log(`este es ${Object.values(row)}`)
-        datos.forEach(element =>{
-            if(element.id == new Number(ev.target.id)){
-                row.id=element.id
-                element = row   
-            }
-        })
+        
+        actualRow.nombre = form['textNombre'].value
+        actualRow.apellido = form['textApellido'].value
+        actualRow.matricula = form['textMatricula'].value
+        actualRow.nota = form['textNota'].value 
+       
+        console.log(datos)
         tr = ev.target.parentNode.parentNode
-        console.log(tr)
-        console.log(row)
-        tr.innerHTML=`<td id='td_${row.id}'>${row.id}</td>
-                            <td>${row.nombre}</td>
-                            <td>${row.apellido}
-                            <td>${row.matricula}</td>
-                            <td>${row.nota}</td>
+        tr.innerHTML=`<td id='td_${actualRow.id}'>${actualRow.id}</td>
+                            <td>${actualRow.nombre}</td>
+                            <td>${actualRow.apellido}
+                            <td>${actualRow.matricula}</td>
+                            <td>${actualRow.nota}</td>
                             <td>
-                                <button id='${row.id}' onclick="eliminarDatos(event)" class='eliminar'>Eliminar</button>
+                                <button id='${actualRow.id}' onclick="eliminarDatos(event)" class='eliminar btn btn-outline-light side'>Eliminar</button>
                                 <br>
-                                <button id='${row.id}' onclick="editarDatos(event)" class='remover'>Editar</button>
+                                <button id='${actualRow.id}' onclick="editarDatos(event)" class='remover btn btn-outline-light side'>Editar</button>
                     </td>`
-           
+        calcularPromedio()
+        ev.target.innerHTML = 'Editar'
     }
-
+    
 }
 
 const createRow= (body) =>{
@@ -100,20 +103,19 @@ const createRow= (body) =>{
                                 <td>${element.matricula}</td>
                                 <td>${element.nota}</td>
                                 <td>
-                                    <button id='${id}' onclick="eliminarDatos(event)" class='eliminar'>Eliminar</button>
+                                    <button id='${id}' onclick="eliminarDatos(event)" class='eliminar btn btn-outline-light side'>Eliminar</button>
                                     <br>
-                                    <button id='${id}' onclick="editarDatos(event)" class='remover'>Editar</button>
-                                </td>
+                                    <button id='${id}' onclick="editarDatos(event)" class='remover btn btn-outline-light side'>Editar</button>
+                                </td> 
                             </tr>`
         }
     })
 }
+
 window.onload = () =>{
-    // let datos = []
     let mydiv = document.getElementById('mydiv')
     let tbody = document.getElementById('t_body')
-    mydiv.innerHTML='Hola mundo'
-    console.log(document.forms['myform']['textApellido'])
+    let boton = document.getElementById('btnlimpiar')
     form = document.forms[0]
     form.addEventListener('submit',(ev)=>{
         ev.preventDefault()
@@ -121,5 +123,11 @@ window.onload = () =>{
         guardarDatos(registro,datos)
         createRow(tbody,datos)
         incrementarId()
+        calcularPromedio()
     })
+    boton.addEventListener('click',(ev)=>{
+        limpiarDatos(form)
+    })
+   
+     
 }
