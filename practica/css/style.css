@@ -1,0 +1,25 @@
+
+.container-fluid {
+    width: 80vw;
+    /* height: 100vh; */
+    min-height: 80vh;
+    margin: auto;
+    background-color: aquamarine;
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+}
+form {
+    margin-left: 60%;
+}
+#divPok {
+    padding: 1.5em;
+    margin-top:5vh;
+    margin-left: 30%;
+    border: 1px solid black;
+    width: 30%;
+    height: 100%;
+}
+input[type='text'] {
+    border-radius: 10px;
+    height: 2em;
+}
