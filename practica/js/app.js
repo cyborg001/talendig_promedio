@@ -1,14 +1,3 @@
-
-const width = 640;
-const height = 400;
-const marginTop = 20;
-const marginRight = 20;
-const marginBottom = 30;
-const marginLeft = 40;
-const x = d3.scaleUtc()
-    .domain([new Date("2023-01-01"), new Date("2024-01-01")])
-    .range([marginLeft, width - marginRight]);
-
 const getHabilidades = (pockemon)=>{
     ol = document.createElement('ol')
     Object.keys(pockemon.abilities).forEach((key)=>{
